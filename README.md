@@ -1,15 +1,16 @@
-# Welcome to your CDK TypeScript project
+# Upload Big Files using AWS
 
-You should explore the contents of this project. It demonstrates a CDK app with an instance of a stack (`CdkWorkshopStack`)
-which contains an Amazon SQS queue that is subscribed to an Amazon SNS topic.
+Esse repositório foi parte de estudos de AWS onde o objetivo era subir um arquivo grande no formato `.pdf` na AWS e depois poder resgatar esse arquivo.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Ferramentas Utilizadas
+- AWS CDK
+- AWS CloudFront
+- AWS Gateway API
+- AWS Lambda
+- AWS S3
 
-## Useful commands
+## Arquitetura
+![GET request](https://github.com/LeoFuna/upload-big-file-aws/assets/80538553/82873c3d-b560-4854-88b2-0a0c212226d4)
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `cdk deploy`      deploy this stack to your default AWS account/region
-* `cdk diff`        compare deployed stack with current state
-* `cdk synth`       emits the synthesized CloudFormation template
+## Pre-visualização
+![aws-big-file](https://github.com/LeoFuna/upload-big-file-aws/assets/80538553/c1f195fa-25dd-462f-99c1-787aa23e7c37)
