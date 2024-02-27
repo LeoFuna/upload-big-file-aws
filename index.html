@@ -1,0 +1,67 @@
+<html lang="pt-br">
+    <input onchange="onChangeFile(event)" type="file" name="large-file" id="large-file" />
+    <button onclick="uploadToS3()">Upload file</button>
+    <button onclick="getFileOnS3()">Download file</button>
+    <script>
+      let fileToUpload;
+      let signedUrlToDownload;
+      const apiGatewayPresignedUrl = 'my-api-gateway-url';
+
+      uploadToS3 = async () => {
+        if (!fileToUpload) {
+          alert('No file selected');
+          return;
+        }
+        const presignedUrl = await getSignedUrl();
+
+        const fileAsUrl = await getFileAsBuffer(fileToUpload);
+
+        const fileData = await fetch(presignedUrl.url, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/pdf',
+            'Content-Encoding': 'base64',
+          },
+          body: fileAsUrl,
+        });
+        console.log('File uploaded successfully');
+      };
+
+      getSignedUrl = async () => {
+        const response = await fetch(apiGatewayPresignedUrl);
+        const data = await response.json();
+        console.log('Presigned URL received');
+        return data;
+      };
+
+      getFileOnS3 = async () => {
+        console.log('Getting file from S3...');
+        const signedUrl = await getSignedUrl();
+        const response = await fetch(signedUrl.getUrl);
+        const data = await response.blob();
+        console.log('File received from S3');
+        const objectUrl = URL.createObjectURL(data);
+
+        const imgElement = document.createElement('iframe')
+        imgElement.src = objectUrl;
+        imgElement.width = 800;
+        imgElement.height = 600;
+
+        document.body.appendChild(imgElement);
+      };
+
+      getFileAsBuffer = (file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsArrayBuffer(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = (error) => reject(error);
+        });
+      };
+
+      onChangeFile = (event) => {
+        fileToUpload = event.target.files[0];
+      };
+    </script>
+  </body>
+</html>
